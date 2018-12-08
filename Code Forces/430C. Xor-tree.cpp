@@ -38,96 +38,37 @@ void fast()
 {
 	std::ios_base::sync_with_stdio(0);
 }
-vector<pair<int, int>>eo;
+int n, u, v;
 vector<vector<int>>adjl;
-vector<int>dist,init,gol,picked;
-vector<bool>vis;
-int n,u,v,cnt;
-void bfs(int s)
+vector<int>init, goal, ans;
+void dfs(int u, int p, int sumO, int sumE, bool dep)
 {
-	queue<int>q;
-	q.push(s);
-	dist[s] = 0;
-	int sz = 1, dep = 1;
-	for (; !q.empty(); sz = q.size(), dep++)
-	{
-		while (sz--)
-		{
-			int temp = q.front();
-			q.pop();
-			for (int i = 0; i < adjl[temp].size(); i++)
-			{
-				if (temp < adjl[temp][i])
-				{
-					dist[adjl[temp][i]] = dep;
-					q.push(adjl[temp][i]);
-				}
-			}
-		}
-	}
-}
-void dfs(int nod)
-{
-	vis[nod] = 1;
-	if (dist[nod] % 2 == 0)
-	{
-		init[nod] = (eo[nod].first % 2 == 0 ? init[nod] : 1 - init[nod]);
-		if (init[nod] != gol[nod])
-		{
-			init[nod] = gol[nod];
-			eo[nod].first++;
-			picked.push_back(nod + 1);
-			cnt++;
-		}
-	}
-	else
-	{
-		init[nod] = (eo[nod].second % 2 == 0 ? init[nod] : 1 - init[nod]);
-		if (init[nod] != gol[nod])
-		{
-			init[nod] = gol[nod];
-			eo[nod].second++;
-			picked.push_back(nod + 1);
-			cnt++;
-		}
-	}
-	for (int i = 0; i < adjl[nod].size(); i++)
-	{
-		if (!vis[adjl[nod][i]])
-		{
-			eo[adjl[nod][i]] = eo[nod];
-			dfs(adjl[nod][i]);
-		}
-	}
+	if (!dep && (init[u] + sumE) % 2 != goal[u])
+		sumE++, init[u] = goal[u], ans.push_back(u + 1);
+	else if (dep && (init[u] + sumO) % 2 != goal[u])
+		sumO++, init[u] = goal[u], ans.push_back(u + 1);
+	for (int i = 0; i < adjl[u].size(); i++)
+		if (adjl[u][i] != p)
+			dfs(adjl[u][i], u, sumO, sumE, !dep);
 }
 int main()
 {
 #ifndef ONLINE_JUDGE
 	freopen("input.txt", "r", stdin);
-//	freopen("output.txt","w",stdout);
+	//freopen("output.txt","w",stdout);
 #endif
 	scanf("%d", &n);
-	adjl.resize(n);
-	vis.resize(n);
-	dist.resize(n);
-	init.resize(n);
-	gol.resize(n);
-	eo.resize(n, { 0 ,0 });
+	adjl.resize(n), goal.resize(n), init.resize(n);
 	for (int i = 0; i < n - 1; i++)
 	{
 		scanf("%d%d", &u, &v);
-		u--, v--;
-		adjl[u].push_back(v);
+		adjl[--u].push_back(--v);
 		adjl[v].push_back(u);
 	}
-	bfs(0);
-	for (int i = 0; i < n; i++)
-		scanf("%d", &init[i]);
-	for (int i = 0; i < n; i++)
-		scanf("%d", &gol[i]);
-	dfs(0);
-	printf("%d\n", cnt);
-	for (int i = 0; i < picked.size(); i++)
-		printf("%d\n", picked[i]);
+	for (int &i : init)scanf("%d", &i);
+	for (int &i : goal)scanf("%d", &i);
+	dfs(0, -1, 0, 0, 0);
+	printf("%d\n", ans.size());
+	for (int &i : ans)printf("%d\n", i);
 	return 0;
 }
