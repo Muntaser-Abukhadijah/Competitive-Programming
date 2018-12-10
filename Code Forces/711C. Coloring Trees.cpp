@@ -37,36 +37,41 @@ void fast()
 {
 	std::ios_base::sync_with_stdio(0);
 }
-int n;
-vector<int>prev, cur;
+ll n, m, k, x;
+vector<ll>col;
+vector<vector<ll>>cost;
+ll mem[105][105][105];
+ll solve(ll i, ll last, ll groub)
+{
+	if (i == n)
+		return (groub != k) ? 1e18 : 0;
+	ll &ret = mem[i][last][groub];
+	if (ret != -1)
+		return ret;
+	ret = 1e18;
+	if (col[i] != 0)
+		return ret = min(ret, solve(i + 1, col[i], groub + (col[i] != last)));
+	for (int j = 1; j <= m; j++)
+		ret = min(ret, solve(i + 1, j, groub + (j != last)) + cost[i][j - 1]);
+	return ret;
+}
 int main()
 {
 #ifndef ONLINE_JUDGE
 	freopen("input.txt", "r", stdin);
 	//freopen("output.txt","w",stdout);
 #endif
-	scanf("%d", &n);
-	prev.resize(n);
-	cur.resize(n);
-	for (int &i : rev)scanf("%d", &i);
-	cur = prev;
-	for (int i = 1; i <= 100; i++)
-	{
-		for (int j = 1; j < n-1; j++)
+	memset(mem, -1, sizeof(mem));
+	scanf("%lld%lld%lld", &n, &m, &k);
+	col.resize(n);
+	cost.resize(n);
+	for (ll &i : col)scanf("%lld", &i);
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
 		{
-			if (cur[j - 1] + cur[j] + cur[j + 1] <= 1)
-				cur[j] = 0;
-			else
-				cur[j] = 1;
+			scanf("%lld", &x);
+			cost[i].push_back(x);
 		}
-		if (cur == prev)
-		{
-			printf("%d\n", i - 1);
-			for (int &i : cur)printf("%d ", i);
-			puts("");
-			return 0;
-		}
-	}
-	puts("-1");
+	solve(0, 101, 0) >= 1e18 ? puts("-1") : printf("%lld\n", solve(0, 101, 0));
 	return 0;
 }
