@@ -46,7 +46,7 @@ double area(int x1, int y1, int x2, int y2, int x3, int y3)
 }
 bool check(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int px, int py)
 {
-	double A = area(x1, y1, x2, y2, x3, y3)+ area(x1, y1, x4, y4, x3, y3);
+	double A = area(x1, y1, x2, y2, x3, y3) + area(x1, y1, x4, y4, x3, y3);
 	double A1 = area(x1, y1, x2, y2, px, py);
 	double A2 = area(x2, y2, px, py, x3, y3);
 	double A3 = area(px, py, x4, y4, x3, y3);
@@ -57,12 +57,13 @@ bool check(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int p
 }
 int main()
 {
-	int n, d,px,py,tc;
-	scanf("%d%d%d", &n, &d, &tc);
+	// 1 2 3 7 3 7 1 2 1 3 100
+	int tc, x1, y1, x2, y2, x3, y3, x4, y4, px, py;
+	scanf("%d", &tc);
 	while (tc--)
 	{
-		scanf("%d%d", &px, &py);
-		if (check(0,d,d,0,n,n-d,n-d,n,px,py))
+		scanf("%d%d%d%d%d%d%d%d%d%d", &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4, &px, &py);
+		if (check(x1, y1, x2, y2, x3, y3, x4, y4, px, py))
 			puts("YES");
 		else
 			puts("NO");
