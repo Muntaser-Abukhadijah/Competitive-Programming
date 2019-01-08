@@ -34,13 +34,13 @@ const double  EPS = 1e-11;
 const ll MOD = 1000000007;
 const int N = 100000 + 7;
 // --------------------- Complex Number and 2D Point -------------- //
-#define angle(a)				  atan2(a.imag(),a.real());                // to get the angle.
-#define length(a)				  hypot(a.imag() , a.real());              // to get r.
-#define vec(a,b)				  (b-a);                                   // vector
-#define dotP(a,b)				  (conj(a)*b).real();					   // Dot product.
-#define crossP(a,b)				  (conj(a)*b).imag();			           // Cross Product.
-#define rotate0(p,ang)            (p*exp(complex<double>(0,ang)));         // rotate around zero.
-#define rotateA(p,ang,about)	  (rotate0(vec(about,p),ang,about);        // rotate around point.
+#define angle(a)				  atan2(a.imag(),a.real())                // to get the angle.
+#define length(a)				  hypot(a.imag() , a.real())              // to get r.
+#define vec(a,b)				  (b-a)                                   // vector
+#define dotP(a,b)				  (conj(a)*b).real()					   // Dot product.
+#define crossP(a,b)				  (conj(a)*b).imag()			           // Cross Product.
+#define rotate0(p,ang)            (p*exp(complex<double>(0,ang)))         // rotate around zero.
+#define rotateA(p,ang,about)	  (rotate0(vec(about,p),ang,about)        // rotate around point.
 #define reflect0(v,m)             (conj(v/m)*m)                            // v&m are vectors , reflect form origin around vectot.
 // --------------------- Complex Number and 2D Point -------------- //
 void fast()
