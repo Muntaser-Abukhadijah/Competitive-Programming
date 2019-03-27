@@ -1,3 +1,4 @@
+// ~/Remember,remember the 6th of March
 #include <functional>
 #include <iomanip>
 #include <stdio.h>
@@ -30,30 +31,28 @@ typedef long long ll;
 typedef unsigned long long ull;
 const double PI = acos(-1.0);
 const double  EPS = 1e-11;
-const ll MOD = 1000000007;
+const ll MOD = 100000000;
 const int N = 2e6 + 10;
 void fast()
 {
 	std::ios_base::sync_with_stdio(0);
 }
-string s;
-int mem[66][66];
-int calc(int i, int j)
+ll n, k, d;
+ll mem[101];
+ll calc(ll n, ll ran)
 {
-	if (i == j)
+	if (n == 0)
 		return 1;
-	if (i + 1 == j)
-		return 2 + (s[i] == s[j]);
-	int &ret = mem[i][j];
+	ll &ret = mem[n];
 	if (ret != -1)
 		return ret;
 	ret = 0;
-	if (s[i] == s[j])
-		ret += 1 + calc(i + 1, j - 1);
-	ret += calc(i + 1, j);
-	ret += calc(i, j - 1);
-	ret -= calc(i + 1, j - 1);
-	return ret;
+	for (ll i = 1; i <= ran && n - i > -1; i++)
+	{
+		ret += calc(n - i, ran);
+		ret %= MOD;
+	}
+	return ret % MOD;
 }
 int main()
 {
@@ -61,13 +60,11 @@ int main()
 	freopen("input.txt", "r", stdin);
 	//freopen("output.txt","w",stdout);
 #endif
-	int n;
-	cin >> n;
-	for (int i = 0; i < n; i++)
-	{
-		memset(mem, -1, sizeof(mem));
-		cin >> s;
-		cout << calc(0, s.size() - 1) << endl;
-	}
+	cin >> n >> k >> d;
+	memset(mem, -1, sizeof(mem));
+	ll x = calc(n, k);
+	memset(mem, -1, sizeof(mem));
+	ll y = calc(n, d - 1);
+	cout << ((x - y) % MOD + MOD) % MOD << endl;
 	return 0;
 }

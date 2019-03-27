@@ -1,3 +1,4 @@
+// ~/Remember,remember the 6th of March
 #include <functional>
 #include <iomanip>
 #include <stdio.h>
@@ -30,44 +31,51 @@ typedef long long ll;
 typedef unsigned long long ull;
 const double PI = acos(-1.0);
 const double  EPS = 1e-11;
-const ll MOD = 1000000007;
+const ll MOD = 100000000;
 const int N = 2e6 + 10;
 void fast()
 {
 	std::ios_base::sync_with_stdio(0);
 }
-string s;
-int mem[66][66];
-int calc(int i, int j)
+vector<int>Sides;
+ll mem[40][40];
+ll calc(int index, int last)
 {
-	if (i == j)
+	if (index == Sides.size())
 		return 1;
-	if (i + 1 == j)
-		return 2 + (s[i] == s[j]);
-	int &ret = mem[i][j];
-	if (ret != -1)
-		return ret;
-	ret = 0;
-	if (s[i] == s[j])
-		ret += 1 + calc(i + 1, j - 1);
-	ret += calc(i + 1, j);
-	ret += calc(i, j - 1);
-	ret -= calc(i + 1, j - 1);
-	return ret;
+	ll ans = 0;
+	for (int i = last; i <= Sides[index]; i++)
+	{
+		ll &ret = mem[index][i];
+		if (ret != -1)
+			ans += ret;
+		else
+		{
+			ret = 0;
+			ret += calc(index + 1, i);
+			ans += ret;
+		}
+
+	}
+	return ans;
 }
+class DiceGames {
+public:
+	long long countFormations(vector <int> sides)
+	{
+		Sides = sides;
+		sort(Sides.begin(), Sides.end());
+		memset(mem, -1, sizeof(mem));
+		return calc(0, 1);
+	}
+};
 int main()
 {
 #ifndef ONLINE_JUDGE
 	freopen("input.txt", "r", stdin);
 	//freopen("output.txt","w",stdout);
 #endif
-	int n;
-	cin >> n;
-	for (int i = 0; i < n; i++)
-	{
-		memset(mem, -1, sizeof(mem));
-		cin >> s;
-		cout << calc(0, s.size() - 1) << endl;
-	}
+	DiceGames o1;
+	cout << o1.countFormations({ 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32 }) << endl;
 	return 0;
 }
