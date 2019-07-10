@@ -40,7 +40,7 @@ const int N = 100000 + 7;
 #define dotP(a,b)				  ((conj(a)*b).real())					   // Dot product.
 #define crossP(a,b)				  ((conj(a)*b).imag())		           // Cross Product.
 #define rotate0(p,ang)            (p*exp(complex<double>(0,ang)))         // rotate around zero.
-#define rotateA(p,ang,about)	  (rotate0(vec(about,p),ang,about)        // rotate around point.
+#define rotateA(p,ang,about)	  (rotate0(vec(about,p),ang)+about)        // rotate around point.
 #define reflect0(v,m)             (conj(v/m)*m)                            // v&m are vectors , reflect form origin around vectot.
 // --------------------- Complex Number and 2D Point -------------- //
 int dcmp(double a, double b)
