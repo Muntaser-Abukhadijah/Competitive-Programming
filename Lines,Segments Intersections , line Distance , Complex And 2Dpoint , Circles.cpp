@@ -47,6 +47,13 @@ int dcmp(double a, double b)
 {
 	return (fabs(a - b) < EPS ? 0 : a > b ? 1 : -1);
 }
+complex<double> reflect(complex<double> p, complex<double> p0, complex<double> p1)
+{
+//	reflect(point want to reflect, around point, reflect on vector(point)) 
+//	- (around point, reflect on vector(point)) the vector that doesn't start from origin and you want to reflect about 
+	complex<double> z = p - p0, w = p1 - p0;
+	return conj(z / w)*w + p0;
+}
 bool isCollinear(complex<double>a, complex<double>b, complex<double>c)
 {
 	return (fabs(crossP((b - a), (c - a))) < EPS);           // is point c on line AB.
@@ -128,7 +135,7 @@ pair<double, complex<double>> findCircle(complex<double> a, complex<double> b, c
 	complex<double> m1 = (b + a)*0.5, v1 = b - a, pv1 = complex<double>(v1.imag(), -v1.real());
 	complex<double> m2 = (b + c)*0.5, v2 = b - c, pv2 = complex<double>(v2.imag(), -v2.real());
 	complex<double> end1 = m1 + pv1, end2 = m2 + pv2, center;
-	center =lineLineIntersection(m1, end1, m2, end2);
+	center = lineLineIntersection(m1, end1, m2, end2);
 	return make_pair((length((a - center))), center);
 }
 vector<complex<double>> intersectLineCircle(complex<double> p0, complex<double> p1, complex<double> C, double r) {
@@ -151,11 +158,11 @@ bool same(complex<double>c1, complex<double>c2)
 		return 1;
 	return 0;
 }
-double fixAngle(double A) 
+double fixAngle(double A)
 {
 	return A > 1 ? 1 : (A < -1 ? -1 : A);
 }
-double getAngle_A_abc(double a, double b, double c) 
+double getAngle_A_abc(double a, double b, double c)
 {
 	return acos(fixAngle((b*b + c * c - a * a) / (2 * b*c)));
 }
@@ -165,11 +172,11 @@ vector<complex<double>> intersectCircleCircle(complex<double> c1, double r1, com
 		return vector<complex<double>>(3, c1);    // infinity 2 same circles (not points)
 	  // Compute 2 intersection case and handle 0, 1, 2 cases
 	double ang1 = angle((c2 - c1)), ang2 = getAngle_A_abc(r2, r1, length((c2 - c1)));
-	if (::isnan(ang2)) // if r1 or d = 0 => nan in getAngle_A_abc (/0)
+	if (::isnan(ang2)) // if r1 or d = 0 => nan in getAngle_A_abc (/0)  // you can use this : bool is_nan(double x) { return x != x; } , or remove ::
 		ang2 = 0; // fix corruption
 	vector<complex<double>> v(1, polar(r1, ang1 + ang2) + c1);
 	// if point NOT on the 2 circles = no intersection
-	if (dcmp(dotP((v[0] - c1), (v[0] - c1)), r1*r1) != 0 ||dcmp(dotP((v[0] - c2), (v[0] - c2)), (r2*r2)) != 0)
+	if (dcmp(dotP((v[0] - c1), (v[0] - c1)), r1*r1) != 0 || dcmp(dotP((v[0] - c2), (v[0] - c2)), (r2*r2)) != 0)
 		return vector<complex<double>>();
 	v.push_back(polar(r1, ang1 - ang2) + c1);
 	if (same(v[0], v[1]))  // if same, then 1 intersection only
@@ -182,5 +189,6 @@ int main()
 	freopen("input.txt", "r", stdin);
 	//freopen("output.txt","w",stdout);
 #endif
+
 	return 0;
 }
